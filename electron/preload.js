@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke('transcription:transcribe', { audioBase64, mimeType }),
   generateNote: (transcript, photoBase64List, prompt) =>
     ipcRenderer.invoke('claude:generateNote', { transcript, photoBase64List, prompt }),
+  checkClaudeCodeStatus: () => ipcRenderer.invoke('claudeCode:checkStatus'),
   saveNote: (note) => ipcRenderer.invoke('notes:save', note),
   listNotes: () => ipcRenderer.invoke('notes:list'),
 

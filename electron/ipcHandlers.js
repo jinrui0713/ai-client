@@ -28,6 +28,10 @@ export function registerIpcHandlers() {
     return claudeService.generateNote(transcript, photoBase64List, prompt)
   })
 
+  ipcMain.handle('claudeCode:checkStatus', async () => {
+    return claudeService.checkAvailability()
+  })
+
   ipcMain.handle('transcription:transcribe', async (_event, { audioBase64, mimeType }) => {
     return transcriptionService.transcribeAudio(audioBase64, mimeType)
   })
