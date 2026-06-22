@@ -1,0 +1,30 @@
+{
+  "name": "ai-task-client",
+  "version": "0.1.0",
+  "description": "課題解決AIクライアント - Claude APIを使ったデスクトップAIクライアント",
+  "main": "out/main/main.js",
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "start": "electron-vite preview",
+    "dist": "npm run build && electron-builder",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "lowdb": "^7.0.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.11"
+  }
+}
