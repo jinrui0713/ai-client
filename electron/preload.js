@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('api', {
   generateNote: (transcript, photoBase64List, prompt) =>
     ipcRenderer.invoke('claude:generateNote', { transcript, photoBase64List, prompt }),
   checkClaudeCodeStatus: () => ipcRenderer.invoke('claudeCode:checkStatus'),
+  checkTranscriptionStatus: () => ipcRenderer.invoke('transcription:checkStatus'),
   saveNote: (note) => ipcRenderer.invoke('notes:save', note),
   listNotes: () => ipcRenderer.invoke('notes:list'),
 
@@ -21,7 +22,7 @@ contextBridge.exposeInMainWorld('api', {
   listPromptHistory: (feature) => ipcRenderer.invoke('promptHistory:list', feature),
   addPromptHistory: (feature, text) => ipcRenderer.invoke('promptHistory:add', { feature, text }),
 
-  // APIキー管理（safeStorage経由、平文保存なし）
-  setApiKey: (service, key) => ipcRenderer.invoke('apiKey:set', { service, key }),
-  hasApiKey: (service) => ipcRenderer.invoke('apiKey:has', service)
+  // ローカル設定（whisper.cppのバイナリ/モデルパス等、機密情報ではないためlowdbに保存）
+  getSetting: (key) => ipcRenderer.invoke('settings:get', key),
+  setSetting: (key, value) => ipcRenderer.invoke('settings:set', { key, value })
 })

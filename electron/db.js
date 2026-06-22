@@ -10,12 +10,13 @@ export async function getDb() {
 
   const dbPath = path.join(app.getPath('userData'), 'db.json')
   const adapter = new JSONFile(dbPath)
-  const db = new Low(adapter, { promptHistory: [], notes: [] })
+  const db = new Low(adapter, { promptHistory: [], notes: [], settings: {} })
 
   await db.read()
-  db.data ||= { promptHistory: [], notes: [] }
+  db.data ||= { promptHistory: [], notes: [], settings: {} }
   db.data.promptHistory ||= []
   db.data.notes ||= []
+  db.data.settings ||= {}
 
   dbInstance = db
   return dbInstance

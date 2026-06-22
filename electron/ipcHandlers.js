@@ -5,7 +5,7 @@ import * as claudeService from './services/claudeService.js'
 import * as transcriptionService from './services/transcriptionService.js'
 import * as promptHistoryStore from './services/promptHistoryStore.js'
 import * as notesStore from './services/notesStore.js'
-import * as apiKeyStore from './services/apiKeyStore.js'
+import * as settingsStore from './services/settingsStore.js'
 
 export function registerIpcHandlers() {
   ipcMain.handle('dialog:selectPdfFile', async () => {
@@ -52,12 +52,16 @@ export function registerIpcHandlers() {
     return promptHistoryStore.addPromptHistory(feature, text)
   })
 
-  ipcMain.handle('apiKey:set', async (_event, { service, key }) => {
-    await apiKeyStore.setApiKey(service, key)
-    return true
+  ipcMain.handle('transcription:checkStatus', async () => {
+    return transcriptionService.checkAvailability()
   })
 
-  ipcMain.handle('apiKey:has', async (_event, service) => {
-    return apiKeyStore.hasApiKey(service)
+  ipcMain.handle('settings:get', async (_event, key) => {
+    return settingsStore.getSetting(key)
+  })
+
+  ipcMain.handle('settings:set', async (_event, { key, value }) => {
+    await settingsStore.setSetting(key, value)
+    return true
   })
 }
