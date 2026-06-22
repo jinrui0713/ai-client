@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import AudioRecorder from '../components/AudioRecorder.jsx'
 import CameraCapture from '../components/CameraCapture.jsx'
 import PromptHistoryPicker from '../components/PromptHistoryPicker.jsx'
@@ -12,6 +12,16 @@ export default function NoteTakingView() {
   const [isTranscribing, setIsTranscribing] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0)
+  const [savedNotes, setSavedNotes] = useState([])
+
+  const loadSavedNotes = useCallback(async () => {
+    const notes = await window.api.listNotes()
+    setSavedNotes(notes)
+  }, [])
+
+  useEffect(() => {
+    loadSavedNotes()
+  }, [loadSavedNotes])
 
   const handleRecorded = async (audioBase64, mimeType) => {
     setIsTranscribing(true)
@@ -49,6 +59,7 @@ export default function NoteTakingView() {
         photoPaths: [],
         generatedNote: note
       })
+      await loadSavedNotes()
     } catch (err) {
       setError(err.message)
     } finally {
@@ -100,6 +111,22 @@ export default function NoteTakingView() {
         {error && <div className="error-box">{error}</div>}
         {generatedNote && <div className="answer-box">{generatedNote}</div>}
       </div>
+
+      {savedNotes.length > 0 && (
+        <div className="card">
+          <label>保存済みノート</label>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {savedNotes.map((note) => (
+              <li key={note.id} style={{ padding: '8px 0', borderBottom: '1px solid #eee' }}>
+                <strong>{note.title}</strong>
+                <span style={{ marginLeft: 8, color: '#888', fontSize: 12 }}>
+                  {new Date(note.createdAt).toLocaleString('ja-JP')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
